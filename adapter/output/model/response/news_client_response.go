@@ -1,17 +1,12 @@
-package domain
+package response
 
-type NewsReqDomain struct {
-	Subject string
-	From    string
-}
-
-type NewsDomain struct {
+type NewsClientResponse struct {
 	Status       string
-	TotalResults string
-	Articles     []Article
+	TotalResults int64
+	Articles     []ArticleResponse
 }
 
-type Article struct {
+type ArticleResponse struct {
 	Source      ArticleSourceResponse
 	Author      string
 	Title       string

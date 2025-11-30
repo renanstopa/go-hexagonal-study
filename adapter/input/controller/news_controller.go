@@ -2,9 +2,11 @@ package controller
 
 import (
 	"go-study/adapter/input/model/request"
+	"go-study/application/domain"
 	"go-study/application/port/input"
 	"go-study/configuration/logger"
 	"go-study/configuration/validation"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,5 +32,16 @@ func (nc *newsController) GetNews(c *gin.Context) {
 		return
 	}
 
-	_, _ = nc.newsUseCase.GetNewsService(newsRequest.Subject, newsRequest.From)
+	newsDomain := domain.NewsReqDomain{
+		Subject: newsRequest.Subject,
+		From:    newsRequest.From.Format("2006-01-02"),
+	}
+
+	newsResponseDomain, err := nc.newsUseCase.GetNewsService(newsDomain)
+	if err != nil {
+		c.JSON(err.Code, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, newsResponseDomain)
 }
